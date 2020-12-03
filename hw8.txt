@@ -1,0 +1,58 @@
+Jerry Yang
+005384352 Assignment 8
+
+2) New Branch
+git checkout v3.0 -b quote
+
+3) Install out change
+patch -p1 < ../quote-3.0-patch.txt
+
+4) Emacs (C-x 4 a)
+
+5) create ChangeLog entry 
+emacs filename.c
+C-x 4 a
+- Copied the changlog text into each of the files.
+C-x C-c
+y
+
+6) Commit Changes
+git add .
+git commit -F ChangeLog
+
+7) Genate Formatted Patch
+git format-patch -1 --stdout > ../formatted-patch.txt
+
+8) Check it works
+git clone https://git.savannah.gnu.org/git/diffutils.git
+git checkout v3.0 -b patchery
+git am ../formatted-patch.txt
+
+Build new version
+./boostrap
+./configure
+make
+make check
+
+Ran diff 
+src/diff . -
+src/diff --help
+
+9) Verify ChangeLog
+make distdir
+this simply made a new diffutils directory version, check the changelogs
+
+10) Gitk
+ssh -Y jerry@lnxsrv07.seas.ucla.edu
+cd ~/eggert/src/gnu/emacs
+gitk
+
+Requires install X11 to be activated.
+gitk window- there are three connected windows on top, one that describes the commits
+on that lists the names/emails of the commiter, as well as the dat/time of the commits.
+Below that, to the left shows a window where we can see the code/diff files, and to
+the bottom right there a window that breaks down what is in the left.
+
+Newest merge not newer than 2015-01-24 02:09:02 from Eli Zaretskii <eliz@gnu.org>
+concerening adding a cross-reference in Elisp manual. (Bug#19668)
+(there are a lot from 1-24-2015, not sure which exactly is newest)

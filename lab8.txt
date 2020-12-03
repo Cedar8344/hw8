@@ -1,0 +1,238 @@
+Jerry Yang
+005384352 Lab 8
+
+1) Get a copy of diffutils
+git clone https://git.savannah.gnu.org/git/diffutils.git
+
+2) git log
+cd diffutils
+git log > ../git-log.txt
+
+3) git tag
+git tag > ../git-tag.txt
+
+4) Make patch file
+nano git-log.txt
+Ctrl + W, Search: maint: quote 'like this...
+- copy down the commit number
+commit 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f
+git show 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f > ../quote-patch.txt
+
+5) Check out
+git checkout v3.0
+
+6) Apply patch
+patch -p1 < ../quote-patch.txt
+- hit return a few times, a few errors appeared while running the patch
+
+These are the errors I noticed in the output:
+
+Hunk #1 FAILED at 9.
+Hunk #3 FAILED at 60.
+2 out of 3 hunks FAILED -- saving rejects to file README.rej
+patching file README-hacking
+Hunk #1 FAILED at 19.
+1 out of 1 hunk FAILED -- saving rejects to file README-hacking.rej
+patching file TODO
+patching file cfg.mk
+Hunk #1 FAILED at 29.
+1 out of 1 hunk FAILED -- saving rejects to file cfg.mk.rej
+patching file doc/diagmeet.note
+
+can't find file to patch at input line 222
+
+1 out of 1 hunk ignored
+
+can't find file to patch at input line 235
+
+Skipping patch.
+9 out of 9 hunks ignored
+
+patching file src/diff.c
+Hunk #1 succeeded at 40 with fuzz 2 (offset -2 lines).
+Hunk #2 succeeded at 57 (offset -2 lines).
+Hunk #3 succeeded at 92 (offset -2 lines).
+Hunk #4 succeeded at 330 (offset -10 lines).
+Hunk #5 succeeded at 505 (offset -10 lines).
+Hunk #6 succeeded at 534 (offset -10 lines).
+Hunk #7 succeeded at 585 (offset -14 lines).
+Hunk #8 succeeded at 744 (offset -14 lines).
+Hunk #9 succeeded at 826 (offset -14 lines).
+Hunk #10 FAILED at 876.
+Hunk #11 FAILED at 906.
+Hunk #12 FAILED at 942.
+Hunk #13 succeeded at 960 with fuzz 2 (offset -29 lines).
+Hunk #14 succeeded at 1159 with fuzz 2 (offset -32 lines).
+3 out of 14 hunks FAILED -- saving rejects to file src/diff.c.rej
+
+patching file src/diff3.c
+Hunk #1 succeeded at 35 (offset 1 line).
+Hunk #2 succeeded at 159 (offset 1 line).
+Hunk #3 succeeded at 316 (offset 1 line).
+Hunk #4 succeeded at 351 (offset 1 line).
+Hunk #5 succeeded at 412 (offset 1 line).
+Hunk #6 FAILED at 433.
+Hunk #7 succeeded at 460 with fuzz 2 (offset -18 lines).
+Hunk #8 succeeded at 1275 (offset -18 lines).
+Hunk #9 succeeded at 1475 (offset -18 lines).
+1 out of 9 hunks FAILED -- saving rejects to file src/diff3.c.rej
+patching file src/dir.c
+Hunk #1 succeeded at 84 (offset -1 lines).
+Hunk #2 succeeded at 125 (offset -1 lines).
+Hunk #3 succeeded at 154 (offset -1 lines).
+Hunk #4 succeeded at 234 (offset -1 lines).
+
+7)status
+git status
+# HEAD detached at v3.0
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#       modified:   NEWS
+#       modified:   README
+#       modified:   TODO
+#       modified:   doc/diagmeet.note
+#       modified:   ms/config.bat
+#       modified:   ms/config.site
+#       modified:   po/en.po
+#       modified:   src/analyze.c
+#       modified:   src/cmp.c
+#       modified:   src/context.c
+#       modified:   src/diff.c
+#       modified:   src/diff.h
+#       modified:   src/diff3.c
+#       modified:   src/dir.c
+#       modified:   src/ifdef.c
+#       modified:   src/io.c
+#       modified:   src/sdiff.c
+#       modified:   src/side.c
+#       modified:   src/system.h
+#       modified:   src/util.c
+#       modified:   tests/help-version
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#       NEWS.orig
+#       README-hacking.orig
+#       README-hacking.rej
+#       README.orig
+#       README.rej
+#       cfg.mk.orig
+#       cfg.mk.rej
+#       ms/config.site.orig
+#       src/cmp.c.orig
+#       src/context.c.orig
+#       src/diff.c.orig
+#       src/diff.c.rej
+#       src/diff.h.orig
+#       src/diff3.c.orig
+#       src/diff3.c.rej
+#       src/dir.c.orig
+#       src/sdiff.c.orig
+#       src/system.h.orig
+#       src/util.c.orig
+#       tests/help-version.orig
+no changes added to commit (use "git add" and/or "git commit -a")
+
+8) Emacs Functions
+vc-diff- compares work file under current fileset (directory?) to version you are editing
+vc-revert- revert work file to the last revision
+* use this to unmodify
+diff-apply-hunk- apply hunk to target file, sees what is changed
+diff-goto-source- go to source/line of hunk, changes file to the 'new' version of the file
+
+9) Reverting Files
+emacs filename
+C-x v = 
+C-x v u
+y e s return
+C-x C-c
+> Revert all non .c files repeating this process
+
+If git status is run again at this point, you can see only .c files are still left modified:
+#       modified:   src/analyze.c
+#       modified:   src/cmp.c
+#       modified:   src/context.c
+#       modified:   src/diff.c
+#       modified:   src/diff3.c
+#       modified:   src/dir.c
+#       modified:   src/ifdef.c
+#       modified:   src/io.c
+#       modified:   src/sdiff.c
+#       modified:   src/side.c
+#       modified:   src/util.c
+
+Slightly different process for c files: we only want to change certain areas, so instead:
+emacs filename.c
+C-x v =
+C-u C-c C-a //repeat this part as many times as needed to revert all coments
+C-x C-c
+y
+> Repeat process for all .c files
+
+Essentially, since we want to revert the comment files, we only want to use the
+C-u C-c C-a line on hunts that are comment changes (noticable by the /* marker)
+Manually go through each file with emacs making the changes.
+
+10) src/*.c.rej
+- There are only 2, diff3.c.rej and diff.c.rej
+
+Make the changes manually.
+
+11) Remove untracked 
+git clean -f
+
+12) Recheck Status
+git status
+# HEAD detached at v3.0
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#       modified:   src/cmp.c
+#       modified:   src/diff.c
+#       modified:   src/diff3.c
+#       modified:   src/dir.c
+#       modified:   src/sdiff.c
+#       modified:   src/util.c
+#
+no changes added to commit (use "git add" and/or "git commit -a")
+
+Only some of the original .c files have changes to their code, which means once the comments
+are revereted, only some of the files will still show changes
+
+Creating Patch Files
+git diff > ../quote-3.0-patch.txt
+wc -l ../quote-3.0-patch.txt
+It has 318 lines, which is in the range told to us in the lab
+
+
+13) Applying
+./bootstrap
+./configure
+make
+make check
+
+duff . '
+diff --help
+
+Output goes as expected, using the change approtrophe character (which was the point of the patch)
+
+14) Comparing
+mkdir diffutils-3.0
+mkdir diffutils-3.0-patch
+
+copy the original ./src/*.c code into 3.0, and our patched version into 3.0-patch
+Original is gotten by cloning a new version, checout to v3.0, and copying the .c files over
+
+compare the two files using the diff command we just created
+./diffutils/src/diff -pru diffutils-3.0 diffutils-3.0-patch > quote-3.0-test.txt
+
+15. Compare again
+diff quote-3.0-test.txt quote-3.0-patch.txt > finaldiff.txt
+
+There are many differences, but they are almost all changes in the apostrophe
+as well as some difference in paths. Our version runs the same as diff, 
+so we know that our changes are innocuous.
